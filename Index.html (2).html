@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yash Taekwondo Academy - Enterprise Management System</title>
+    <style>
+        * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; }
+        body { background-color: #f0f2f5; padding: 15px; color: #333; }
+        .container { max-width: 1200px; margin: auto; }
+        
+        header { background: linear-gradient(135deg, #d9534f, #b52b27); color: white; padding: 20px; text-align: center; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.15); position: relative; }
+        header h1 { font-size: 26px; margin-bottom: 5px; }
+        .logout-btn { position: absolute; right: 20px; top: 20px; background: rgba(255,255,255,0.2); color: white; border: 1px solid white; padding: 6px 12px; border-radius: 5px; cursor: pointer; }
+        .logout-btn:hover { background: white; color: #d9534f; }
+
+        /* Auth Card */
+        .auth-container { max-width: 400px; margin: 50px auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); text-align: center; }
+        .auth-container h2 { margin-bottom: 20px; color: #d9534f; }
+        .auth-tabs { display: flex; margin-bottom: 20px; border-bottom: 2px solid #ddd; }
+        .auth-tab { flex: 1; padding: 10px; cursor: pointer; font-weight: bold; color: #666; }
+        .auth-tab.active { color: #d9534f; border-bottom: 3px solid #d9534f; margin-bottom: -2px; }
+
+        /* Dashboard UI */
+        .dashboard { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 20px; }
+        .card { background: white; padding: 15px; border-radius: 8px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.08); border-left: 4px solid #d9534f; }
+        .card h3 { font-size: 13px; color: #666; margin-bottom: 5px; }
+        .card p { font-size: 22px; font-weight: bold; color: #333; }
+
+        .section { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.08); margin-bottom: 20px; }
+        .section h2 { border-bottom: 2px solid #f0f2f5; padding-bottom: 10px; margin-bottom: 15px; color: #444; font-size: 18px; }
+
+        form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 15px; }
+        input, select, button, textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 14px; margin-bottom: 10px; }
+        button { background: #d9534f; color: white; border: none; cursor: pointer; font-weight: bold; }
+        button:hover { background: #c9302c; }
+
+        .filter-bar { display: flex; gap: 15px; background: #e9ecef; padding: 12px; border-radius: 8px; margin-bottom: 15px; flex-wrap: wrap; align-items: center; }
+        .filter-bar label { font-weight: bold; font-size: 14px; }
+        .filter-bar select { width: auto; margin-bottom: 0; }
+
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 13px; }
+        th, td { padding: 10px; border: 1px solid #e0e0e0; text-align: left; }
+        th { background-color: #f8f9fa; color: #555; }
+
+        .badge { padding: 4px 8px; border-radius: 4px; font-size: 11px; color: white; font-weight: bold; display: inline-block; }
+        .badge-present { background-color: #28a745; }
+        .badge-absent { background-color: #dc3545; }
+        .badge-paid { background-color: #007bff; }
+        .badge-pending { background-color: #ffc107; color: #333; }
+        
+        .btn-sm { padding: 5px 8px; font-size: 11px; margin-right: 3px; width: auto; display: inline-block; }
+        .btn-green { background-color: #28a745; }
+        .btn-orange { background-color: #dc3545; }
+        .btn-blue { background-color: #007bff; }
+        .btn-dark { background-color: #343a40; }
+
+        .hidden { display: none !important; }
+        
+        .profile-card { background: #f8f9fa; border: 1px solid #ddd; padding: 15px; border-radius: 8px; margin-bottom: 15px; }
+        .profile-card h3 { color: #d9534f; margin-bottom: 10px; }
+        .profile-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; font-size: 14px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- LOGIN SCREEN -->
+    <div id="authScreen" class="auth-container">
+        <h2>🥋 Yash Taekwondo</h2>
+        <div class="auth-tabs">
+            <div id="tabAdmin" class="auth-tab active" onclick="switchTab('admin')">Admin Login</div>
+            <div id="tabStudent" class="auth-tab" onclick="switchTab('student')">Student Login</div>
+        </div>
+
+        <!-- Admin Login Form -->
+        <form id="adminLoginForm">
+            <input type="text" id="adminUser" placeholder="Admin Username (Default: admin)" required>
+            <input type="password" id="adminPass" placeholder="Password (Default: admin123)" required>
+            <button type="submit">Login as Admin</button>
+        </form>
+
+        <!-- Student Login Form -->
+        <form id="studentLoginForm" class="hidden">
+            <input type="tel" id="studentMobileLogin" placeholder="Registered Mobile Number" required>
+            <button type="submit">Login as Student</button>
+        </form>
+    </div>
+
+    <!-- MAIN APP SCREEN -->
+    <div id="appScreen" class="hidden">
+        <header>
+            <h1>🥋 Yash Taekwondo Academy</h1>
+            <p id="roleTitle">Management System</p>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </header>
+
+        <!-- ADMIN VIEW -->
+        <div id="adminView" class="hidden">
+            <!-- Dashboard Summary -->
+            <div class="dashboard">
+                <div class="card">
+                    <h3>Total Students</h3>
+                    <p id="statTotal">0</p>
+                </div>
+                <div class="card">
+                    <h3>Selected Month Present</h3>
+                    <p id="statPresent">0</p>
+                </div>
+                <div class="card">
+                    <h3>Selected Month Paid</h3>
+                    <p id="statPaid">0</p>
+                </div>
+                <div class="card">
+                    <h3>Selected Month Pending</h3>
+                    <p id="statPending">0</p>
+                </div>
+            </div>
+
+            <!-- Add New Student Form -->
+            <div class="section">
+                <h2>➕ Naya Student Registration</h2>
+                <form id="addStudentForm">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px;">
+                        <input type="text" id="sName" placeholder="Full Name" required>
+                        <input type="date" id="sDob" title="Date of Birth" required>
+                        <input type="tel" id="sMobile" placeholder="Mobile Number" required>
+                        <select id="sBelt" required>
+                            <option value="">Present Belt Rank</option>
+                            <option value="White Belt">White Belt</option>
+                            <option value="Yellow Belt">Yellow Belt</option>
+                            <option value="Green Belt">Green Belt</option>
+                            <option value="Blue Belt">Blue Belt</option>
+                            <option value="Red Belt">Red Belt</option>
+                            <option value="Black Belt">Black Belt</option>
+                        </select>
+                        <input type="date" id="sDoj" title="Date of Joining" required>
+                        <select id="sBatch" required>
+                            <option value="">Batch Timing</option>
+                            <option value="Morning">Morning Batch</option>
+                            <option value="Evening">Evening Batch</option>
+                        </select>
+                    </div>
+                    <textarea id="sAddress" placeholder="Full Address" rows="2" required></textarea>
+                    <button type="submit">Student Save Karein</button>
+                </form>
+            </div>
+
+            <!-- Student Master Table & Attendance / Fee Log -->
+            <div class="section">
+                <h2>📋 Student Directory & Attendance/Fee Logs</h2>
+
+                <!-- Month & Year Selector Filter -->
+                <div class="filter-bar">
+                    <label>Month Select Karein:</label>
+                    <select id="filterMonth" onchange="renderAdminData()">
+                        <option value="01">January</option>
+                        <option value="02">February</option>
+                        <option value="03">March</option>
+                        <option value="04">April</option>
+                        <option value="05">May</option>
+                        <option value="06">June</option>
+                        <option value="07">July</option>
+                        <option value="08">August</option>
+                        <option value="09">September</option>
+                        <option value="10">October</option>
+                        <option value="11">November</option>
+                        <option value="12">December</option>
+                    </select>
+
+                    <label>Year Select Karein:</label>
+                    <select id="filterYear" onchange="renderAdminData()">
+                        <option value="2024">2024</option>
+                        <option value="2025">2025</option>
+                        <option value="2026" selected>2026</option>
+                        <option value="2027">2027</option>
+                    </select>
+                </div>
+
+                <div style="overflow-x:auto;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Student Details</th>
+                                <th>DOB / Joining</th>
+                                <th>Belt & Batch</th>
+                                <th>Address</th>
+                                <th>Monthly Fee Status</th>
+                                <th>Attendance (Selected Month)</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="studentTableBody">
+                            <!-- Dynamic Rows -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- STUDENT VIEW -->
+        <div id="studentView" class="hidden">
+            <div class="section">
+                <h2>👤 My Profile Details</h2>
+                <div class="profile-card">
+                    <h3 id="stProfileName">Name</h3>
+                    <div class="profile-grid">
+                        <p><strong>Mobile:</strong> <span id="stProfileMobile"></span></p>
+                        <p><strong>Date of Birth:</strong> <span id="stProfileDob"></span></p>
+                        <p><strong>Current Belt:</strong> <span id="stProfileBelt"></span></p>
+                        <p><strong>Date of Joining:</strong> <span id="stProfileDoj"></span></p>
+                        <p><strong>Batch:</strong> <span id="stProfileBatch"></span></p>
+                        <p><strong>Address:</strong> <span id="stProfileAddress"></span></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>📊 My Monthly Fee & Attendance Record</h2>
+                <div class="filter-bar">
+                    <label>Select Year:</label>
+                    <select id="stFilterYear" onchange="renderStudentDashboard()">
+                        <option value="2025">2025</option>
+                        <option value="2026" selected>2026</option>
+                    </select>
+                </div>
+
+                <div style="overflow-x:auto;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Month</th>
+                                <th>Fee Status</th>
+                                <th>Attendance Count (Present)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="studentLogsBody">
+                            <!-- Dynamic Student View -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+    // Local Data Storage Keys
+    let students = JSON.parse(localStorage.getItem('yash_taekwondo_v2_students')) || [];
+    let monthlyRecords = JSON.parse(localStorage.getItem('yash_taekwondo_v2_records')) || {}; 
+    // Structure: monthlyRecords['YYYY-MM'][studentId] = { feeStatus: 'Paid', presentDays: 15 }
+
+    let currentLoggedInStudent = null;
+
+    // Default Month/Year Initialization
+    const today = new Date();
+    document.getElementById('filterMonth').value = String(today.getMonth() + 1).padStart(2, '0');
+    document.getElementById('filterYear').value = today.getFullYear();
+
+    // Login Navigation
+    function switchTab(type) {
+        if(type === 'admin') {
+            document.getElementById('tabAdmin').classList.add('active');
+            document.getElementById('tabStudent').classList.remove('active');
+            document.getElementById('adminLoginForm').classList.remove('hidden');
+            document.getElementById('studentLoginForm').classList.add('hidden');
+        } else {
+            document.getElementById('tabStudent').classList.add('active');
+            document.getElementById('tabAdmin').classList.remove('active');
+            document.getElementById('studentLoginForm').classList.remove('hidden');
+            document.getElementById('adminLoginForm').classList.add('hidden');
+        }
+    }
+
+    // Admin Login Logic
+    document.getElementById('adminLoginForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const u = document.getElementById('adminUser').value;
+        const p = document.getElementById('adminPass').value;
+        if(u === 'admin' && p === 'admin123') {
+            showApp('admin');
+        } else {
+            alert('Invalid Admin Credentials! (Use admin / admin123)');
+        }
+    });
+
+    // Student Login Logic
+    document.getElementById('studentLoginForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const mob = document.getElementById('studentMobileLogin').value.trim();
+        const found = students.find(s => s.mobile === mob);
+        if(found) {
+            currentLoggedInStudent = found;
+            showApp('student');
+        } else {
+            alert('Mobile Number Not Registered!');
+        }
+    });
+
+    function showApp(role) {
+        document.getElementById('authScreen').classList.add('hidden');
+        document.getElementById('appScreen').classList.remove('hidden');
+        if(role === 'admin') {
+            document.getElementById('adminView').classList.remove('hidden');
+            document.getElementById('studentView').classList.add('hidden');
+            document.getElementById('roleTitle').innerText = 'Admin / Coach Portal';
+            renderAdminData();
+        } else {
+            document.getElementById('studentView').classList.remove('hidden');
+            document.getElementById('adminView').classList.add('hidden');
+            document.getElementById('roleTitle').innerText = 'Student Portal';
+            renderStudentDashboard();
+        }
+    }
+
+    function logout() {
+        document.getElementById('appScreen').classList.add('hidden');
+        document.getElementById('authScreen').classList.remove('hidden');
+        currentLoggedInStudent = null;
+    }
+
+    // Add Student
+    document.getElementById('addStudentForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const newStudent = {
+            id: Date.now(),
+            name: document.getElementById('sName').value,
+            dob: document.getElementById('sDob').value,
+            mobile: document.getElementById('sMobile').value,
+            belt: document.getElementById('sBelt').value,
+            doj: document.getElementById('sDoj').value,
+            batch: document.getElementById('sBatch').value,
+            address: document.getElementById('sAddress').value
+        };
+        students.push(newStudent);
+        saveStudents();
+        this.reset();
+        renderAdminData();
+    });
+
+    function saveStudents() {
+        localStorage.setItem('yash_taekwondo_v2_students', JSON.stringify(students));
+    }
+
+    function saveRecords() {
+        localStorage.setItem('yash_taekwondo_v2_records', JSON.stringify(monthlyRecords));
+    }
+
+    // Helper: Get or Init Record key for YYYY-MM
+    function getRecordKey() {
+        const m = document.getElementById('filterMonth').value;
+        const y = document.getElementById('filterYear').value;
+        return `${y}-${m}`;
+    }
+
+    // Render Admin Data Table
+    function renderAdminData() {
+        const key = getRecordKey();
+        if(!monthlyRecords[key]) monthlyRecords[key] = {};
+
+        const tbody = document.getElementById('studentTableBody');
+        tbody.innerHTML = '';
+
+        let totalP = 0, totalPaid = 0, totalPend = 0;
+
+        students.forEach(student => {
+            if(!monthlyRecords[key][student.id]) {
+                monthlyRecords[key][student.id] = { feeStatus: 'Pending', presentDays: 0 };
+            }
+            const record = monthlyRecords[key][student.id];
+
+            if(record.feeStatus === 'Paid') totalPaid++; else totalPend++;
+            totalP += record.presentDays;
+
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td><strong>${student.name}</strong><br><small>📱 ${student.mobile}</small></td>
+                <td>DOB: ${student.dob}<br>DOJ: ${student.doj}</td>
+                <td><span class="badge" style="background:#6c757d;">${student.belt}</span><br><small>${student.batch}</small></td>
+                <td>${student.address}</td>
+                <td>
+                    <span class="badge ${record.feeStatus === 'Paid' ? 'badge-paid' : 'badge-pending'}">
+                        ${record.feeStatus}
+                    </span>
+                    <br><br>
+                    <button class="btn-sm btn-blue" onclick="toggleFee('${key}', ${student.id})">Toggle Fee</button>
+                </td>
+                <td>
+                    <strong>Days Present: ${record.presentDays}</strong><br><br>
+                    <button class="btn-sm btn-green" onclick="adjustAttendance('${key}', ${student.id}, 1)">+1 Present</button>
+                    <button class="btn-sm btn-orange" onclick="adjustAttendance('${key}', ${student.id}, -1)">-1</button>
+                </td>
+                <td>
+                    <button class="btn-sm btn-dark" onclick="deleteStudent(${student.id})">Delete</button>
+                </td>
+            `;
+            tbody.appendChild(tr);
+        });
+
+        // Update Admin Stats
+        document.getElementById('statTotal').innerText = students.length;
+        document.getElementById('statPresent').innerText = totalP;
+        document.getElementById('statPaid').innerText = totalPaid;
+        document.getElementById('statPending').innerText = totalPend;
+    }
+
+    function toggleFee(key, studentId) {
+        const cur = monthlyRecords[key][studentId].feeStatus;
+        monthlyRecords[key][studentId].feeStatus = cur === 'Paid' ? 'Pending' : 'Paid';
+        saveRecords();
+        renderAdminData();
+    }
+
+    function adjustAttendance(key, studentId, change) {
+        let cur = monthlyRecords[key][studentId].presentDays || 0;
+        cur += change;
+        if(cur < 0) cur = 0;
+        monthlyRecords[key][studentId].presentDays = cur;
+        saveRecords();
+        renderAdminData();
+    }
+
+    function deleteStudent(id) {
+        if(confirm("Kya aap is student profile ko delete karna chahte hain?")) {
+            students = students.filter(s => s.id !== id);
+            saveStudents();
+            renderAdminData();
+        }
+    }
+
+    // Render Student View
+    function renderStudentDashboard() {
+        if(!currentLoggedInStudent) return;
+        const s = currentLoggedInStudent;
+
+        document.getElementById('stProfileName').innerText = s.name;
+        document.getElementById('stProfileMobile').innerText = s.mobile;
+        document.getElementById('stProfileDob').innerText = s.dob;
+        document.getElementById('stProfileBelt').innerText = s.belt;
+        document.getElementById('stProfileDoj').innerText = s.doj;
+        document.getElementById('stProfileBatch').innerText = s.batch;
+        document.getElementById('stProfileAddress').innerText = s.address;
+
+        const year = document.getElementById('stFilterYear').value;
+        const tbody = document.getElementById('studentLogsBody');
+        tbody.innerHTML = '';
+
+        const months = ['01','02','03','04','05','06','07','08','09','10','11','12'];
+        const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+        months.forEach((m, idx) => {
+            const key = `${year}-${m}`;
+            const rec = (monthlyRecords[key] && monthlyRecords[key][s.id]) ? monthlyRecords[key][s.id] : { feeStatus: 'Pending', presentDays: 0 };
+
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td><strong>${monthNames[idx]} ${year}</strong></td>
+                <td><span class="badge ${rec.feeStatus === 'Paid' ? 'badge-paid' : 'badge-pending'}">${rec.feeStatus}</span></td>
+                <td>${rec.presentDays} Days Present</td>
+            `;
+            tbody.appendChild(tr);
+        });
+    }
+</script>
+
+</body>
+</html>
