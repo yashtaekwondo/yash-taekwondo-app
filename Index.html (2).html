@@ -124,12 +124,6 @@
         font-size: 18px;
       }
 
-      form-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 12px;
-        margin-bottom: 15px;
-      }
       input,
       select,
       button,
@@ -196,12 +190,6 @@
         font-weight: bold;
         display: inline-block;
       }
-      .badge-present {
-        background-color: #28a745;
-      }
-      .badge-absent {
-        background-color: #dc3545;
-      }
       .badge-paid {
         background-color: #007bff;
       }
@@ -240,6 +228,19 @@
         padding: 15px;
         border-radius: 8px;
         margin-bottom: 15px;
+        display: flex;
+        gap: 20px;
+        align-items: center;
+      }
+      .profile-card img {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid #d9534f;
+      }
+      .profile-info {
+        flex: 1;
       }
       .profile-card h3 {
         color: #d9534f;
@@ -250,6 +251,19 @@
         grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
         gap: 10px;
         font-size: 14px;
+      }
+
+      .student-cell {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .student-thumb {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 1px solid #ccc;
       }
     </style>
   </head>
@@ -276,13 +290,13 @@
           <input
             type="text"
             id="adminUser"
-            placeholder="Admin Username "
+            placeholder="Admin Username"
             required
           />
           <input
             type="password"
             id="adminPass"
-            placeholder="Password "
+            placeholder="Password"
             required
           />
           <button type="submit">Login as Admin</button>
@@ -359,7 +373,7 @@
                   <option value="White Belt">White Belt</option>
                   <option value="Yellow Belt">Yellow Belt</option>
                   <option value="Green Belt">Green Belt</option>
-                  <option value="Green One Belt">Green Belt</option>
+                  <option value="Green One Belt">Green One Belt</option>
                   <option value="Blue Belt">Blue Belt</option>
                   <option value="Blue One Belt">Blue One Belt</option>
                   <option value="Red Belt">Red Belt</option>
@@ -373,6 +387,18 @@
                   <option value="Morning">Morning Batch</option>
                   <option value="Evening">Evening Batch</option>
                 </select>
+                <div>
+                  <label
+                    style="
+                      font-size: 12px;
+                      color: #666;
+                      display: block;
+                      margin-bottom: 2px;
+                    "
+                    >Upload Photo:</label
+                  >
+                  <input type="file" id="sPhoto" accept="image/*" />
+                </div>
               </div>
               <textarea
                 id="sAddress"
@@ -441,27 +467,33 @@
           <div class="section">
             <h2>👤 My Profile Details</h2>
             <div class="profile-card">
-              <h3 id="stProfileName">Name</h3>
-              <div class="profile-grid">
-                <p>
-                  <strong>Mobile:</strong> <span id="stProfileMobile"></span>
-                </p>
-                <p>
-                  <strong>Date of Birth:</strong>
-                  <span id="stProfileDob"></span>
-                </p>
-                <p>
-                  <strong>Current Belt:</strong>
-                  <span id="stProfileBelt"></span>
-                </p>
-                <p>
-                  <strong>Date of Joining:</strong>
-                  <span id="stProfileDoj"></span>
-                </p>
-                <p><strong>Batch:</strong> <span id="stProfileBatch"></span></p>
-                <p>
-                  <strong>Address:</strong> <span id="stProfileAddress"></span>
-                </p>
+              <img id="stProfileImg" src="" alt="Profile Photo" />
+              <div class="profile-info">
+                <h3 id="stProfileName">Name</h3>
+                <div class="profile-grid">
+                  <p>
+                    <strong>Mobile:</strong> <span id="stProfileMobile"></span>
+                  </p>
+                  <p>
+                    <strong>Date of Birth:</strong>
+                    <span id="stProfileDob"></span>
+                  </p>
+                  <p>
+                    <strong>Current Belt:</strong>
+                    <span id="stProfileBelt"></span>
+                  </p>
+                  <p>
+                    <strong>Date of Joining:</strong>
+                    <span id="stProfileDoj"></span>
+                  </p>
+                  <p>
+                    <strong>Batch:</strong> <span id="stProfileBatch"></span>
+                  </p>
+                  <p>
+                    <strong>Address:</strong>
+                    <span id="stProfileAddress"></span>
+                  </p>
+                </div>
               </div>
             </div>
           </div>
@@ -496,23 +528,20 @@
     </div>
 
     <script>
-      // Local Data Storage Keys
       let students =
         JSON.parse(localStorage.getItem("yash_taekwondo_v2_students")) || [];
       let monthlyRecords =
         JSON.parse(localStorage.getItem("yash_taekwondo_v2_records")) || {};
-      // Structure: monthlyRecords['YYYY-MM'][studentId] = { feeStatus: 'Paid', presentDays: 15 }
 
       let currentLoggedInStudent = null;
+      const defaultAvatar = "https://via.placeholder.com/100?text=No+Photo";
 
-      // Default Month/Year Initialization
       const today = new Date();
       document.getElementById("filterMonth").value = String(
         today.getMonth() + 1,
       ).padStart(2, "0");
       document.getElementById("filterYear").value = today.getFullYear();
 
-      // Login Navigation
       function switchTab(type) {
         if (type === "admin") {
           document.getElementById("tabAdmin").classList.add("active");
@@ -529,7 +558,6 @@
         }
       }
 
-      // Admin Login Logic
       document
         .getElementById("adminLoginForm")
         .addEventListener("submit", function (e) {
@@ -543,7 +571,6 @@
           }
         });
 
-      // Student Login Logic
       document
         .getElementById("studentLoginForm")
         .addEventListener("submit", function (e) {
@@ -583,25 +610,40 @@
         currentLoggedInStudent = null;
       }
 
-      // Add Student
+      // Add Student with Photo Upload Handling
       document
         .getElementById("addStudentForm")
         .addEventListener("submit", function (e) {
           e.preventDefault();
-          const newStudent = {
-            id: Date.now(),
-            name: document.getElementById("sName").value,
-            dob: document.getElementById("sDob").value,
-            mobile: document.getElementById("sMobile").value,
-            belt: document.getElementById("sBelt").value,
-            doj: document.getElementById("sDoj").value,
-            batch: document.getElementById("sBatch").value,
-            address: document.getElementById("sAddress").value,
+          const photoFile = document.getElementById("sPhoto").files[0];
+
+          const createStudentObj = (photoBase64) => {
+            const newStudent = {
+              id: Date.now(),
+              name: document.getElementById("sName").value,
+              dob: document.getElementById("sDob").value,
+              mobile: document.getElementById("sMobile").value,
+              belt: document.getElementById("sBelt").value,
+              doj: document.getElementById("sDoj").value,
+              batch: document.getElementById("sBatch").value,
+              address: document.getElementById("sAddress").value,
+              photo: photoBase64 || defaultAvatar,
+            };
+            students.push(newStudent);
+            saveStudents();
+            this.reset();
+            renderAdminData();
           };
-          students.push(newStudent);
-          saveStudents();
-          this.reset();
-          renderAdminData();
+
+          if (photoFile) {
+            const reader = new FileReader();
+            reader.onloadend = function () {
+              createStudentObj(reader.result);
+            };
+            reader.readAsDataURL(photoFile);
+          } else {
+            createStudentObj(null);
+          }
         });
 
       function saveStudents() {
@@ -618,14 +660,12 @@
         );
       }
 
-      // Helper: Get or Init Record key for YYYY-MM
       function getRecordKey() {
         const m = document.getElementById("filterMonth").value;
         const y = document.getElementById("filterYear").value;
         return `${y}-${m}`;
       }
 
-      // Render Admin Data Table
       function renderAdminData() {
         const key = getRecordKey();
         if (!monthlyRecords[key]) monthlyRecords[key] = {};
@@ -652,7 +692,14 @@
 
           const tr = document.createElement("tr");
           tr.innerHTML = `
-                <td><strong>${student.name}</strong><br><small>📱 ${student.mobile}</small></td>
+                <td>
+                  <div class="student-cell">
+                    <img src="${student.photo || defaultAvatar}" class="student-thumb" alt="Photo" />
+                    <div>
+                      <strong>${student.name}</strong><br><small>📱 ${student.mobile}</small>
+                    </div>
+                  </div>
+                </td>
                 <td>DOB: ${student.dob}<br>DOJ: ${student.doj}</td>
                 <td><span class="badge" style="background:#6c757d;">${student.belt}</span><br><small>${student.batch}</small></td>
                 <td>${student.address}</td>
@@ -675,7 +722,6 @@
           tbody.appendChild(tr);
         });
 
-        // Update Admin Stats
         document.getElementById("statTotal").innerText = students.length;
         document.getElementById("statPresent").innerText = totalP;
         document.getElementById("statPaid").innerText = totalPaid;
@@ -709,11 +755,11 @@
         }
       }
 
-      // Render Student View
       function renderStudentDashboard() {
         if (!currentLoggedInStudent) return;
         const s = currentLoggedInStudent;
 
+        document.getElementById("stProfileImg").src = s.photo || defaultAvatar;
         document.getElementById("stProfileName").innerText = s.name;
         document.getElementById("stProfileMobile").innerText = s.mobile;
         document.getElementById("stProfileDob").innerText = s.dob;
