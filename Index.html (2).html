@@ -558,7 +558,7 @@
     <!-- TOP NAVIGATION BAR -->
     <nav class="navbar">
       <div class="nav-brand">
-        <img src="https://via.placeholder.com/100?text=TKD" alt="Logo" />
+        <img src="https://drive.google.com/file/d/1mna5VGzn56GzvcTXZo02pF5RVHEkPa1u/view?usp=drive_link" alt="Logo" />
         <h2>Yash Taekwondo</h2>
       </div>
       <button class="menu-toggle" onclick="toggleMenu()">☰</button>
@@ -579,7 +579,6 @@
         <li><a href="#" onclick="showSection('circulars')">Circulars</a></li>
         <li><a href="#" onclick="showSection('media')">Media</a></li>
         <li><a href="#" onclick="showSection('contact')">Contact Us</a></li>
-        <!-- NEW OPTION ADDED BELOW -->
         <li>
           <a href="#" onclick="showSection('champ')" style="color: #ffd700"
             >Champ Management Soft</a
@@ -1100,107 +1099,61 @@
                     <input type="file" id="sPhoto" accept="image/*" />
                   </div>
                 </div>
-
-                <div
-                  style="
-                    margin-top: 10px;
-                    background: #f9f9f9;
-                    padding: 10px;
-                    border-radius: 5px;
-                    border: 1px solid #eee;
-                  "
-                >
-                  <label style="font-size: 13px; font-weight: bold; color: #555"
-                    >🏆 Tournament / Medal Record (Optional):</label
-                  >
-                  <div
-                    style="
-                      display: grid;
-                      grid-template-columns: repeat(
-                        auto-fit,
-                        minmax(150px, 1fr)
-                      );
-                      gap: 10px;
-                      margin-top: 5px;
-                    "
-                  >
-                    <input
-                      type="text"
-                      id="sTourName"
-                      placeholder="Tournament Name"
-                    />
-                    <select id="sMedal">
-                      <option value="">Medal / Status</option>
-                      <option value="Gold Medal">🥇 Gold Medal</option>
-                      <option value="Silver Medal">🥈 Silver Medal</option>
-                      <option value="Bronze Medal">🥉 Bronze Medal</option>
-                      <option value="Participated">🎗 Participated</option>
-                    </select>
-                    <input
-                      type="number"
-                      id="sTourYear"
-                      placeholder="Year (e.g. 2026)"
-                    />
-                  </div>
-                </div>
-
-                <textarea
-                  id="sAddress"
-                  placeholder="Full Address"
-                  rows="2"
-                  style="margin-top: 10px"
-                  required
-                ></textarea>
-                <button type="submit">Save Student Details</button>
+                <button type="submit" style="margin-top: 10px">
+                  Register Student
+                </button>
               </form>
             </div>
 
-            <!-- Student Directory Table -->
+            <!-- Student Management Table -->
             <div class="content-section">
               <div class="section-header">
-                <h2 style="color: #333">📋 Student Directory & Logs</h2>
+                <h2>📋 Registered Students Directory</h2>
                 <button class="btn-excel" onclick="exportToExcel()">
-                  📥 Export to Excel
+                  📥 Export Active List to Excel
                 </button>
               </div>
 
               <div class="filter-bar">
-                <label>Month Select Karein:</label>
-                <select id="filterMonth" onchange="renderAdminData()">
-                  <option value="01">January</option>
-                  <option value="02">February</option>
-                  <option value="03">March</option>
-                  <option value="04">April</option>
-                  <option value="05">May</option>
-                  <option value="06">June</option>
-                  <option value="07">July</option>
-                  <option value="08">August</option>
-                  <option value="09">September</option>
-                  <option value="10">October</option>
-                  <option value="11">November</option>
-                  <option value="12">December</option>
-                </select>
-
-                <label> Select Year:</label>
-                <select id="filterYear" onchange="renderAdminData()">
-                  <option value="2024">2024</option>
-                  <option value="2025">2025</option>
-                  <option value="2026" selected>2026</option>
-                  <option value="2027">2027</option>
-                </select>
+                <div>
+                  <label for="filterMonth">Select Month/Year: </label>
+                  <input
+                    type="month"
+                    id="filterMonth"
+                    onchange="renderAdminTable()"
+                  />
+                </div>
+                <div>
+                  <label for="filterBatch">Batch: </label>
+                  <select id="filterBatch" onchange="renderAdminTable()">
+                    <option value="All">All Batches</option>
+                    <option value="Morning">Morning</option>
+                    <option value="Evening">Evening</option>
+                  </select>
+                </div>
+                <div>
+                  <label for="searchStudent">Search: </label>
+                  <input
+                    type="text"
+                    id="searchStudent"
+                    placeholder="Name or Mobile..."
+                    onkeyup="renderAdminTable()"
+                    style="width: 150px; margin-bottom: 0"
+                  />
+                </div>
               </div>
 
               <div style="overflow-x: auto">
                 <table>
                   <thead>
                     <tr>
-                      <th>Student Details</th>
-                      <th>DOB / Joining</th>
-                      <th>Belt & Batch</th>
-                      <th>Tournament Record</th>
-                      <th>Address</th>
-                      <th>Monthly Fee Status</th>
-                      <th>Attendance (Selected Month)</th>
+                      <th>Profile</th>
+                      <th>Student Name</th>
+                      <th>Mobile / DOB</th>
+                      <th>Belt Rank</th>
+                      <th>Batch</th>
+                      <th>Attendance</th>
+                      <th>Fees Status</th>
                       <th>Actions</th>
                     </tr>
                   </thead>
@@ -1212,73 +1165,36 @@
 
           <!-- STUDENT VIEW -->
           <div id="studentView" class="hidden">
-            <div class="content-section">
-              <h2 style="color: #333">👤 My Profile Details</h2>
-              <div class="profile-card">
-                <img id="stProfileImg" src="" alt="Profile Photo" />
-                <div class="profile-info">
-                  <h3 id="stProfileName">Name</h3>
-                  <div class="profile-grid">
-                    <p>
-                      <strong>Mobile:</strong>
-                      <span id="stProfileMobile"></span>
-                    </p>
-                    <p>
-                      <strong>Date of Birth:</strong>
-                      <span id="stProfileDob"></span>
-                    </p>
-                    <p>
-                      <strong>Current Belt:</strong>
-                      <span id="stProfileBelt"></span>
-                    </p>
-                    <p>
-                      <strong>Date of Joining:</strong>
-                      <span id="stProfileDoj"></span>
-                    </p>
-                    <p>
-                      <strong>Batch:</strong> <span id="stProfileBatch"></span>
-                    </p>
-                    <p>
-                      <strong>Address:</strong>
-                      <span id="stProfileAddress"></span>
-                    </p>
-                  </div>
-                  <div
-                    style="
-                      margin-top: 10px;
-                      background: #fff;
-                      padding: 8px;
-                      border: 1px dashed #ccc;
-                      border-radius: 5px;
-                    "
-                  >
-                    <strong>🏆 Tournament Record:</strong>
-                    <span id="stProfileTournament">N/A</span>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <div id="studentProfileCard" class="profile-card"></div>
 
             <div class="content-section">
-              <h2 style="color: #333">📊 My Monthly Fee & Attendance Record</h2>
-              <div class="filter-bar">
-                <label>Select Year:</label>
-                <select id="stFilterYear" onchange="renderStudentDashboard()">
-                  <option value="2025">2025</option>
-                  <option value="2026" selected>2026</option>
-                </select>
-              </div>
-
+              <h2>📅 Attendance Record</h2>
               <div style="overflow-x: auto">
                 <table>
                   <thead>
                     <tr>
                       <th>Month</th>
-                      <th>Fee Status</th>
-                      <th>Attendance Count (Present)</th>
+                      <th>Total Days Attended</th>
+                      <th>Status</th>
                     </tr>
                   </thead>
-                  <tbody id="studentLogsBody"></tbody>
+                  <tbody id="studentAttendanceBody"></tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="content-section">
+              <h2>💳 Fee Payment History</h2>
+              <div style="overflow-x: auto">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Month</th>
+                      <th>Status</th>
+                      <th>Payment Date</th>
+                    </tr>
+                  </thead>
+                  <tbody id="studentFeesBody"></tbody>
                 </table>
               </div>
             </div>
@@ -1287,13 +1203,146 @@
       </div>
     </div>
 
+    <!-- JAVASCRIPT LOGIC -->
     <script>
-      /* --- RESPONSIVE MENU TOGGLE --- */
+      // DEFAULT DATA & LOCAL STORAGE INITIALIZATION
+      let students = JSON.parse(localStorage.getItem("yta_students")) || [];
+      let slides = JSON.parse(localStorage.getItem("yta_slides")) || [
+        {
+          url: "https://drive.google.com/file/d/1mna5VGzn56GzvcTXZo02pF5RVHEkPa1u/view?usp=drive_link",
+          caption: "Welcome to Yash Taekwondo Academy",
+        },
+        {
+          url: "https://via.placeholder.com/1200x350/343a40/ffffff?text=Champions+in+Making",
+          caption: "Building Character and Discipline",
+        },
+      ];
+      let siteData = JSON.parse(localStorage.getItem("yta_sitedata")) || {
+        aboutTitle: "About Us",
+        aboutDesc:
+          "Yash Taekwondo Academy ek premier institute hai jo disciplined athletes tayar karne ke liye dedicated hai.",
+        branches: ["Main Centre - City Sports Complex", "East Branch - Public School Gym"],
+        players: [
+          {
+            name: "Rahul Sharma",
+            rank: "Gold Medalist (State)",
+            img: "https://via.placeholder.com/150",
+          },
+        ],
+        events: [
+          {
+            name: "Annual Taekwondo Championship 2026",
+            date: "2026-03-15",
+            desc: "Inter-school championship for all belt ranks.",
+          },
+        ],
+        circulars: [
+          {
+            title: "Belt Examination Notice",
+            desc: "Upcoming belt promotion test will be held next month.",
+          },
+        ],
+        media: ["https://via.placeholder.com/300?text=Event+Photo+1"],
+        contact: {
+          phone: "+91 9876543210",
+          email: "info@yashtaekwondo.com",
+          address: "Yash Taekwondo Main Centre, India",
+        },
+        champ: {
+          desc: "Welcome to Champ Management Soft portal. Yahan se championship, tournament scoring aur athlete management tools access karein.",
+          link: "https://example.com",
+        },
+      };
+
+      let currentSlide = 0;
+      let slideInterval;
+      let currentUser = null;
+
+      // INITIAL SETUP
+      document.addEventListener("DOMContentLoaded", () => {
+        // Set default month to current YYYY-MM
+        const today = new Date();
+        const m = String(today.getMonth() + 1).padStart(2, "0");
+        const y = today.getFullYear();
+        document.getElementById("filterMonth").value = `${y}-${m}`;
+
+        renderSlider();
+        startSlider();
+        renderPublicContent();
+      });
+
+      // SLIDER FUNCTIONS
+      function renderSlider() {
+        const wrapper = document.getElementById("sliderWrapper");
+        const dotsWrapper = document.getElementById("dotsWrapper");
+
+        // Remove old slides & dots
+        document.querySelectorAll(".slide").forEach((el) => el.remove());
+        dotsWrapper.innerHTML = "";
+
+        if (slides.length === 0) return;
+
+        slides.forEach((slide, idx) => {
+          const slideDiv = document.createElement("div");
+          slideDiv.className = `slide ${idx === 0 ? "active" : ""}`;
+          slideDiv.innerHTML = `
+            <img src="${slide.url}" alt="Slide ${idx + 1}" />
+            <div class="slide-caption">${slide.caption}</div>
+          `;
+          wrapper.insertBefore(slideDiv, wrapper.querySelector(".prev"));
+
+          const dot = document.createElement("span");
+          dot.className = `dot ${idx === 0 ? "active" : ""}`;
+          dot.onclick = () => setSlide(idx);
+          dotsWrapper.appendChild(dot);
+        });
+      }
+
+      function showSlide(index) {
+        const slideElements = document.querySelectorAll(".slide");
+        const dots = document.querySelectorAll(".dot");
+        if (slideElements.length === 0) return;
+
+        if (index >= slideElements.length) currentSlide = 0;
+        else if (index < 0) currentSlide = slideElements.length - 1;
+        else currentSlide = index;
+
+        slideElements.forEach((s, i) => {
+          s.classList.toggle("active", i === currentSlide);
+        });
+        dots.forEach((d, i) => {
+          d.classList.toggle("active", i === currentSlide);
+        });
+      }
+
+      function changeSlide(step) {
+        showSlide(currentSlide + step);
+        resetSliderTimer();
+      }
+
+      function setSlide(index) {
+        showSlide(index);
+        resetSliderTimer();
+      }
+
+      function startSlider() {
+        slideInterval = setInterval(() => {
+          showSlide(currentSlide + 1);
+        }, 4000);
+      }
+
+      function resetSliderTimer() {
+        clearInterval(slideInterval);
+        startSlider();
+      }
+
+      // NAVIGATION MENU
       function toggleMenu() {
         document.getElementById("navMenu").classList.toggle("show");
       }
 
-      function showSection(sectionId) {
+      function showSection(secId) {
+        // Hide all top-level public sections + login section
         const sections = [
           "home",
           "about",
@@ -1306,728 +1355,615 @@
           "champ",
           "login",
         ];
-        sections.forEach((sec) => {
-          document.getElementById("sec-" + sec).classList.add("hidden");
+        sections.forEach((id) => {
+          const el = document.getElementById(`sec-${id}`);
+          if (el) el.classList.add("hidden");
         });
-        document
-          .querySelectorAll(".nav-menu li a")
-          .forEach((a) => a.classList.remove("active-link"));
-        document.getElementById("sec-" + sectionId).classList.remove("hidden");
+
+        // Show targeted section
+        const target = document.getElementById(`sec-${secId}`);
+        if (target) target.classList.remove("hidden");
+
+        // Close mobile navbar
         document.getElementById("navMenu").classList.remove("show");
+
+        // Update active class on nav links
+        document.querySelectorAll(".nav-menu a").forEach((a) => {
+          a.classList.remove("active-link");
+        });
+        const activeLink = document.getElementById(`link-${secId}`);
+        if (activeLink) activeLink.classList.add("active-link");
       }
 
-      /* --- CMS DATA STORAGE & RENDERING --- */
-      let cmsData = JSON.parse(localStorage.getItem("yash_taekwondo_cms")) || {
-        about: {
-          title: "About Us",
-          desc: "Yash Taekwondo Academy ek premier institute hai jo disciplined athletes tayar karne ke liye dedicated hai.",
-        },
-        branches: [
-          "Central Sports Complex, Main City",
-          "Stadium Road Academy, North Campus",
-        ],
-        players: [
-          {
-            name: "Rohan Sharma",
-            rank: "Black Belt 1st Dan",
-            img: "https://via.placeholder.com/150?text=Rohan",
-          },
-        ],
-        events: [
-          {
-            name: "Annual Belt Exam",
-            date: "2026-09-15",
-            desc: "State level belt promotion exam.",
-          },
-        ],
-        circulars: [
-          {
-            title: "New Timing Notice",
-            desc: "Morning batches start from 6:00 AM in Summer.",
-          },
-        ],
-        media: [
-          "https://via.placeholder.com/300x200?text=Event+Photo+1",
-          "https://via.placeholder.com/300x200?text=Tournament+Photo+2",
-        ],
-        contact: {
-          phone: "+91 9876543210",
-          email: "info@yashtaekwondo.com",
-          address: "Yash Taekwondo Main Centre, India",
-        },
-        champ: {
-          desc: "Welcome to Champ Management Soft portal. Yahan se championship, tournament scoring aur athlete management tools access karein.",
-          link: "#",
-        },
-      };
-
-      function saveCmsData() {
-        localStorage.setItem("yash_taekwondo_cms", JSON.stringify(cmsData));
-        renderPublicCms();
-      }
-
-      function renderPublicCms() {
-        document.getElementById("view-about-title").innerText =
-          cmsData.about.title;
-        document.getElementById("view-about-desc").innerText =
-          cmsData.about.desc;
-
-        const bList = document.getElementById("view-branches-list");
-        bList.innerHTML = cmsData.branches.map((b) => `<li>${b}</li>`).join("");
-
-        const pList = document.getElementById("view-players-list");
-        pList.innerHTML = cmsData.players
-          .map(
-            (p) => `
-          <div style="border:1px solid #ddd; padding:10px; border-radius:5px; text-align:center;">
-            <img src="${p.img}" style="width:100%; height:120px; object-fit:cover; border-radius:4px;">
-            <strong style="display:block; margin-top:5px;">${p.name}</strong>
-            <small>${p.rank}</small>
-          </div>
-        `,
-          )
-          .join("");
-
-        const eList = document.getElementById("view-events-list");
-        eList.innerHTML = cmsData.events
-          .map(
-            (e) => `
-          <div style="background:#f9f9f9; padding:10px; margin-bottom:8px; border-left:3px solid #d9534f;">
-            <strong>${e.name}</strong> (${e.date})
-            <p style="font-size:13px; color:#666;">${e.desc}</p>
-          </div>
-        `,
-          )
-          .join("");
-
-        const cList = document.getElementById("view-circulars-list");
-        cList.innerHTML = cmsData.circulars
-          .map(
-            (c) => `
-          <div style="background:#fff8e7; padding:10px; margin-bottom:8px; border:1px solid #ffeeba;">
-            <strong>📄 ${c.title}</strong>
-            <p style="font-size:13px;">${c.desc}</p>
-          </div>
-        `,
-          )
-          .join("");
-
-        const mList = document.getElementById("view-media-list");
-        mList.innerHTML = cmsData.media.map((m) => `<img src="${m}">`).join("");
-
-        document.getElementById("view-contact-phone").innerText =
-          cmsData.contact.phone;
-        document.getElementById("view-contact-email").innerText =
-          cmsData.contact.email;
-        document.getElementById("view-contact-address").innerText =
-          cmsData.contact.address;
-
-        // Champ Soft Page Render
-        if (cmsData.champ) {
-          document.getElementById("view-champ-desc").innerText =
-            cmsData.champ.desc || "";
-          document.getElementById("view-champ-link").href =
-            cmsData.champ.link || "#";
-        }
-      }
-
-      function switchCmsTab(tabId) {
-        document
-          .querySelectorAll(".cms-pill")
-          .forEach((p) => p.classList.remove("active"));
-        document
-          .querySelectorAll(".cms-box")
-          .forEach((b) => b.classList.add("hidden"));
-
-        event.target.classList.add("active");
-        document.getElementById(tabId).classList.remove("hidden");
-      }
-
-      /* --- CMS ADMIN SUBMISSIONS --- */
-      document
-        .getElementById("aboutForm")
-        .addEventListener("submit", function (e) {
-          e.preventDefault();
-          cmsData.about.title =
-            document.getElementById("aboutTitleInput").value;
-          cmsData.about.desc = document.getElementById("aboutDescInput").value;
-          saveCmsData();
-          alert("About Us updated!");
-        });
-
-      document
-        .getElementById("branchForm")
-        .addEventListener("submit", function (e) {
-          e.preventDefault();
-          cmsData.branches.push(
-            document.getElementById("branchNameInput").value,
-          );
-          saveCmsData();
-          renderAdminCmsLists();
-          this.reset();
-        });
-
-      document
-        .getElementById("playerForm")
-        .addEventListener("submit", function (e) {
-          e.preventDefault();
-          cmsData.players.push({
-            name: document.getElementById("playerNameInput").value,
-            rank: document.getElementById("playerRankInput").value,
-            img: document.getElementById("playerImgInput").value,
-          });
-          saveCmsData();
-          renderAdminCmsLists();
-          this.reset();
-        });
-
-      document
-        .getElementById("eventForm")
-        .addEventListener("submit", function (e) {
-          e.preventDefault();
-          cmsData.events.push({
-            name: document.getElementById("eventNameInput").value,
-            date: document.getElementById("eventDateInput").value,
-            desc: document.getElementById("eventDescInput").value,
-          });
-          saveCmsData();
-          renderAdminCmsLists();
-          this.reset();
-        });
-
-      document
-        .getElementById("circularForm")
-        .addEventListener("submit", function (e) {
-          e.preventDefault();
-          cmsData.circulars.push({
-            title: document.getElementById("circTitleInput").value,
-            desc: document.getElementById("circDescInput").value,
-          });
-          saveCmsData();
-          renderAdminCmsLists();
-          this.reset();
-        });
-
-      document
-        .getElementById("mediaForm")
-        .addEventListener("submit", function (e) {
-          e.preventDefault();
-          cmsData.media.push(document.getElementById("mediaUrlInput").value);
-          saveCmsData();
-          renderAdminCmsLists();
-          this.reset();
-        });
-
-      document
-        .getElementById("contactForm")
-        .addEventListener("submit", function (e) {
-          e.preventDefault();
-          cmsData.contact = {
-            phone: document.getElementById("contactPhoneInput").value,
-            email: document.getElementById("contactEmailInput").value,
-            address: document.getElementById("contactAddressInput").value,
-          };
-          saveCmsData();
-          alert("Contact Details Saved!");
-        });
-
-      document
-        .getElementById("champForm")
-        .addEventListener("submit", function (e) {
-          e.preventDefault();
-          cmsData.champ = {
-            desc: document.getElementById("champDescInput").value,
-            link: document.getElementById("champLinkInput").value,
-          };
-          saveCmsData();
-          alert("Champ Soft details saved!");
-        });
-
-      function renderAdminCmsLists() {
-        document.getElementById("aboutTitleInput").value = cmsData.about.title;
-        document.getElementById("aboutDescInput").value = cmsData.about.desc;
-
-        document.getElementById("contactPhoneInput").value =
-          cmsData.contact.phone;
-        document.getElementById("contactEmailInput").value =
-          cmsData.contact.email;
-        document.getElementById("contactAddressInput").value =
-          cmsData.contact.address;
-
-        if (cmsData.champ) {
-          document.getElementById("champDescInput").value =
-            cmsData.champ.desc || "";
-          document.getElementById("champLinkInput").value =
-            cmsData.champ.link || "";
-        }
+      // PUBLIC CONTENT RENDERER
+      function renderPublicContent() {
+        // About
+        document.getElementById("view-about-title").textContent =
+          siteData.aboutTitle || "About Us";
+        document.getElementById("view-about-desc").textContent =
+          siteData.aboutDesc || "";
 
         // Branches
-        document.getElementById("adminBranchList").innerHTML = cmsData.branches
-          .map(
-            (b, i) => `
-          <div style="display:flex; justify-content:space-between; margin-bottom:5px; background:#f9f9f9; padding:5px;">
-            <span>${b}</span> <button class="btn-sm btn-orange" onclick="deleteCmsItem('branches', ${i})">Delete</button>
-          </div>
-        `,
-          )
+        const branchList = document.getElementById("view-branches-list");
+        branchList.innerHTML = siteData.branches
+          .map((b) => `<li>📍 ${b}</li>`)
           .join("");
 
         // Players
-        document.getElementById("adminPlayerList").innerHTML = cmsData.players
+        const playersList = document.getElementById("view-players-list");
+        playersList.innerHTML = siteData.players
           .map(
-            (p, i) => `
-          <div style="text-align:center; border:1px solid #ddd; padding:5px;">
-            <img src="${p.img}" style="width:100%; height:60px; object-fit:cover;">
-            <small>${p.name}</small><br>
-            <button class="btn-sm btn-orange" onclick="deleteCmsItem('players', ${i})">Delete</button>
+            (p) => `
+          <div style="background: #f9f9f9; padding: 10px; border-radius: 8px; text-align: center; border: 1px solid #eee;">
+            <img src="${p.img}" alt="${p.name}">
+            <h4 style="margin-top: 8px; color: #b52b27;">${p.name}</h4>
+            <p style="font-size: 12px; color: #666;">${p.rank}</p>
           </div>
-        `,
+        `
           )
           .join("");
 
         // Events
-        document.getElementById("adminEventList").innerHTML = cmsData.events
+        const eventsList = document.getElementById("view-events-list");
+        eventsList.innerHTML = siteData.events
           .map(
-            (e, i) => `
-          <div style="display:flex; justify-content:space-between; margin-bottom:5px; background:#f9f9f9; padding:5px;">
-            <span>${e.name} (${e.date})</span> <button class="btn-sm btn-orange" onclick="deleteCmsItem('events', ${i})">Delete</button>
+            (e) => `
+          <div style="background: #f8f9fa; padding: 12px; border-left: 4px solid #b52b27; margin-bottom: 10px; border-radius: 4px;">
+            <h4 style="color: #333;">${e.name}</h4>
+            <p style="font-size: 12px; color: #d9534f; font-weight: bold;">📅 Date: ${e.date}</p>
+            <p style="font-size: 13px; color: #666; margin-top: 4px;">${e.desc}</p>
           </div>
-        `,
+        `
           )
           .join("");
 
         // Circulars
-        document.getElementById("adminCircularList").innerHTML =
-          cmsData.circulars
-            .map(
-              (c, i) => `
-          <div style="display:flex; justify-content:space-between; margin-bottom:5px; background:#f9f9f9; padding:5px;">
-            <span>${c.title}</span> <button class="btn-sm btn-orange" onclick="deleteCmsItem('circulars', ${i})">Delete</button>
+        const circList = document.getElementById("view-circulars-list");
+        circList.innerHTML = siteData.circulars
+          .map(
+            (c) => `
+          <div style="background: #f8f9fa; padding: 12px; border-left: 4px solid #007bff; margin-bottom: 10px; border-radius: 4px;">
+            <h4 style="color: #333;">📢 ${c.title}</h4>
+            <p style="font-size: 13px; color: #555; margin-top: 4px;">${c.desc}</p>
           </div>
-        `,
-            )
-            .join("");
+        `
+          )
+          .join("");
 
         // Media
-        document.getElementById("adminMediaList").innerHTML = cmsData.media
-          .map(
-            (m, i) => `
-          <div style="text-align:center; border:1px solid #ddd; padding:5px;">
-            <img src="${m}" style="width:100%; height:60px; object-fit:cover;">
-            <button class="btn-sm btn-orange" onclick="deleteCmsItem('media', ${i})">Delete</button>
-          </div>
-        `,
-          )
+        const mediaList = document.getElementById("view-media-list");
+        mediaList.innerHTML = siteData.media
+          .map((m) => `<img src="${m}" alt="Gallery Photo">`)
           .join("");
+
+        // Contact
+        document.getElementById("view-contact-phone").textContent =
+          siteData.contact.phone;
+        document.getElementById("view-contact-email").textContent =
+          siteData.contact.email;
+        document.getElementById("view-contact-address").textContent =
+          siteData.contact.address;
+
+        // Champ Soft
+        document.getElementById("view-champ-desc").textContent =
+          siteData.champ.desc;
+        document.getElementById("view-champ-link").href = siteData.champ.link;
       }
 
-      function deleteCmsItem(category, index) {
-        cmsData[category].splice(index, 1);
-        saveCmsData();
-        renderAdminCmsLists();
+      // AUTHENTICATION TABS & LOGIC
+      function switchTab(role) {
+        document.getElementById("tabAdmin").classList.toggle("active", role === "admin");
+        document.getElementById("tabStudent").classList.toggle("active", role === "student");
+        document.getElementById("adminLoginForm").classList.toggle("hidden", role !== "admin");
+        document.getElementById("studentLoginForm").classList.toggle("hidden", role !== "student");
       }
 
-      /* --- SLIDER LOGIC --- */
-      const defaultSlides = [
-        {
-          img: "https://via.placeholder.com/1200x350/d9534f/ffffff?text=Yash+Taekwondo+Academy",
-          caption: "🥋 World Class Taekwondo Training",
-        },
-        {
-          img: "https://via.placeholder.com/1200x350/b52b27/ffffff?text=National+Level+Championships",
-          caption: "🏆 Our Champions in Action",
-        },
-      ];
-      let sliderData =
-        JSON.parse(localStorage.getItem("yash_taekwondo_slides")) ||
-        defaultSlides;
-      let slideIndex = 0;
-      let slideTimer;
+      document.getElementById("adminLoginForm").onsubmit = function (e) {
+        e.preventDefault();
+        const u = document.getElementById("adminUser").value;
+        const p = document.getElementById("adminPass").value;
 
-      function renderSlider() {
-        const sliderWrapper = document.getElementById("sliderWrapper");
-        sliderWrapper.innerHTML = `
-          <a class="prev" onclick="changeSlide(-1)">&#10094;</a>
-          <a class="next" onclick="changeSlide(1)">&#10095;</a>
-          <div class="dots-container" id="dotsWrapper"></div>
-        `;
-        const dotsWrapper = document.getElementById("dotsWrapper");
-
-        sliderData.forEach((slide, idx) => {
-          const slideDiv = document.createElement("div");
-          slideDiv.className = `slide ${idx === 0 ? "active" : ""}`;
-          slideDiv.innerHTML = `<img src="${slide.img}"><div class="slide-caption">${slide.caption}</div>`;
-          sliderWrapper.insertBefore(
-            slideDiv,
-            sliderWrapper.querySelector(".prev"),
-          );
-
-          const dot = document.createElement("span");
-          dot.className = `dot ${idx === 0 ? "active" : ""}`;
-          dot.onclick = () => currentSlide(idx);
-          dotsWrapper.appendChild(dot);
-        });
-        slideIndex = 0;
-        showSlides();
-      }
-
-      function showSlides() {
-        let slides = document.getElementsByClassName("slide");
-        let dots = document.getElementsByClassName("dot");
-        if (slides.length === 0) return;
-        for (let i = 0; i < slides.length; i++)
-          slides[i].classList.remove("active");
-        for (let i = 0; i < dots.length; i++)
-          dots[i].classList.remove("active");
-        slideIndex++;
-        if (slideIndex > slides.length) slideIndex = 1;
-        slides[slideIndex - 1].classList.add("active");
-        if (dots[slideIndex - 1]) dots[slideIndex - 1].classList.add("active");
-        clearTimeout(slideTimer);
-        slideTimer = setTimeout(showSlides, 3000);
-      }
-
-      function changeSlide(n) {
-        clearTimeout(slideTimer);
-        slideIndex += n - 1;
-        showSlides();
-      }
-      function currentSlide(n) {
-        clearTimeout(slideTimer);
-        slideIndex = n;
-        showSlides();
-      }
-
-      document
-        .getElementById("addSliderForm")
-        .addEventListener("submit", function (e) {
-          e.preventDefault();
-          sliderData.push({
-            img: document.getElementById("sliderImgUrl").value.trim(),
-            caption: document.getElementById("sliderCaption").value.trim(),
-          });
-          localStorage.setItem(
-            "yash_taekwondo_slides",
-            JSON.stringify(sliderData),
-          );
-          this.reset();
-          renderSlider();
-          renderAdminSliderList();
-        });
-
-      function renderAdminSliderList() {
-        document.getElementById("adminSliderList").innerHTML = sliderData
-          .map(
-            (s, idx) => `
-          <div class="admin-slider-item">
-            <img src="${s.img}">
-            <small style="display:block; text-overflow:ellipsis; overflow:hidden; white-space:nowrap;">${s.caption}</small>
-            <button class="btn-sm btn-orange" onclick="deleteSlide(${idx})">Delete</button>
-          </div>
-        `,
-          )
-          .join("");
-      }
-
-      function deleteSlide(index) {
-        sliderData.splice(index, 1);
-        localStorage.setItem(
-          "yash_taekwondo_slides",
-          JSON.stringify(sliderData),
-        );
-        renderSlider();
-        renderAdminSliderList();
-      }
-
-      /* --- AUTH & STUDENT LOGIC --- */
-      let students =
-        JSON.parse(localStorage.getItem("yash_taekwondo_v2_students")) || [];
-      let monthlyRecords =
-        JSON.parse(localStorage.getItem("yash_taekwondo_v2_records")) || {};
-      let currentLoggedInStudent = null;
-      const defaultAvatar = "https://via.placeholder.com/100?text=No+Photo";
-
-      const today = new Date();
-      document.getElementById("filterMonth").value = String(
-        today.getMonth() + 1,
-      ).padStart(2, "0");
-      document.getElementById("filterYear").value = today.getFullYear();
-
-      function switchTab(type) {
-        if (type === "admin") {
-          document.getElementById("tabAdmin").classList.add("active");
-          document.getElementById("tabStudent").classList.remove("active");
-          document.getElementById("adminLoginForm").classList.remove("hidden");
-          document.getElementById("studentLoginForm").classList.add("hidden");
+        if (u === "admin" && p === "admin123") {
+          currentUser = { role: "admin" };
+          showAppScreen();
         } else {
-          document.getElementById("tabStudent").classList.add("active");
-          document.getElementById("tabAdmin").classList.remove("active");
-          document
-            .getElementById("studentLoginForm")
-            .classList.remove("hidden");
-          document.getElementById("adminLoginForm").classList.add("hidden");
+          alert("Invalid Admin Credentials!");
         }
-      }
+      };
 
-      document
-        .getElementById("adminLoginForm")
-        .addEventListener("submit", function (e) {
-          e.preventDefault();
-          if (
-            document.getElementById("adminUser").value === "admin" &&
-            document.getElementById("adminPass").value === "admin123"
-          ) {
-            showApp("admin");
-          } else {
-            alert("Invalid Admin Credentials!");
-          }
-        });
+      document.getElementById("studentLoginForm").onsubmit = function (e) {
+        e.preventDefault();
+        const mob = document.getElementById("studentMobileLogin").value.trim();
+        const found = students.find((s) => s.mobile === mob);
 
-      document
-        .getElementById("studentLoginForm")
-        .addEventListener("submit", function (e) {
-          e.preventDefault();
-          const mob = document
-            .getElementById("studentMobileLogin")
-            .value.trim();
-          const found = students.find((s) => s.mobile === mob);
-          if (found) {
-            currentLoggedInStudent = found;
-            showApp("student");
-          } else {
-            alert("Mobile Number Not Registered!");
-          }
-        });
+        if (found) {
+          currentUser = { role: "student", data: found };
+          showAppScreen();
+        } else {
+          alert("Registered mobile number not found!");
+        }
+      };
 
-      function showApp(role) {
+      function showAppScreen() {
         document.getElementById("authScreen").classList.add("hidden");
         document.getElementById("appScreen").classList.remove("hidden");
-        if (role === "admin") {
+
+        if (currentUser.role === "admin") {
+          document.getElementById("roleTitle").textContent = "Admin Control Center";
           document.getElementById("adminView").classList.remove("hidden");
           document.getElementById("studentView").classList.add("hidden");
-          document.getElementById("roleTitle").innerText =
-            "Admin / Coach Portal";
-          renderAdminData();
-          renderAdminSliderList();
-          renderAdminCmsLists();
+          renderAdminTable();
+          renderCmsManager();
         } else {
-          document.getElementById("studentView").classList.remove("hidden");
+          document.getElementById("roleTitle").textContent = "Student Dashboard";
           document.getElementById("adminView").classList.add("hidden");
-          document.getElementById("roleTitle").innerText = "Student Portal";
+          document.getElementById("studentView").classList.remove("hidden");
           renderStudentDashboard();
         }
       }
 
       function logout() {
+        currentUser = null;
         document.getElementById("appScreen").classList.add("hidden");
         document.getElementById("authScreen").classList.remove("hidden");
-        currentLoggedInStudent = null;
+        document.getElementById("adminLoginForm").reset();
+        document.getElementById("studentLoginForm").reset();
       }
 
-      document
-        .getElementById("addStudentForm")
-        .addEventListener("submit", function (e) {
-          e.preventDefault();
-          const photoFile = document.getElementById("sPhoto").files[0];
-          const tourName = document.getElementById("sTourName").value.trim();
-          const medal = document.getElementById("sMedal").value;
-          const tourYear = document.getElementById("sTourYear").value.trim();
+      // CMS MANAGEMENT TABS & HANDLERS
+      function switchCmsTab(tabId) {
+        document.querySelectorAll(".cms-pill").forEach((pill) => {
+          pill.classList.remove("active");
+        });
+        document.querySelectorAll(".cms-box").forEach((box) => {
+          box.classList.add("hidden");
+        });
 
-          const createStudentObj = (photoBase64) => {
-            students.push({
-              id: Date.now(),
-              name: document.getElementById("sName").value,
-              dob: document.getElementById("sDob").value,
-              mobile: document.getElementById("sMobile").value,
-              belt: document.getElementById("sBelt").value,
-              doj: document.getElementById("sDoj").value,
-              batch: document.getElementById("sBatch").value,
-              address: document.getElementById("sAddress").value,
-              tournament: tourName
-                ? { name: tourName, medal: medal, year: tourYear }
-                : null,
-              photo: photoBase64 || defaultAvatar,
-            });
-            localStorage.setItem(
-              "yash_taekwondo_v2_students",
-              JSON.stringify(students),
-            );
-            this.reset();
-            renderAdminData();
+        event.target.classList.add("active");
+        document.getElementById(tabId).classList.remove("hidden");
+      }
+
+      function renderCmsManager() {
+        // Slider list
+        const adminSliderList = document.getElementById("adminSliderList");
+        adminSliderList.innerHTML = slides
+          .map(
+            (s, i) => `
+          <div class="admin-slider-item">
+            <img src="${s.url}" alt="slide">
+            <p style="font-size:11px; margin: 4px 0;">${s.caption}</p>
+            <button class="btn-sm btn-orange" onclick="deleteSlide(${i})">Delete</button>
+          </div>
+        `
+          )
+          .join("");
+
+        // Populate forms
+        document.getElementById("aboutTitleInput").value = siteData.aboutTitle;
+        document.getElementById("aboutDescInput").value = siteData.aboutDesc;
+
+        // Branch list
+        document.getElementById("adminBranchList").innerHTML = siteData.branches
+          .map(
+            (b, i) => `
+          <div style="display:flex; justify-between; align-items:center; background:#f9f9f9; padding:5px 10px; margin-bottom:5px; border-radius:4px;">
+            <span>${b}</span>
+            <button class="btn-sm btn-orange" onclick="deleteBranch(${i})">Delete</button>
+          </div>
+        `
+          )
+          .join("");
+
+        // Players list
+        document.getElementById("adminPlayerList").innerHTML = siteData.players
+          .map(
+            (p, i) => `
+          <div style="background:#f9f9f9; padding:8px; text-align:center; border-radius:4px;">
+            <img src="${p.img}" style="height:60px; object-fit:cover;">
+            <p style="font-weight:bold; font-size:12px;">${p.name}</p>
+            <button class="btn-sm btn-orange" onclick="deletePlayer(${i})">Delete</button>
+          </div>
+        `
+          )
+          .join("");
+
+        // Events list
+        document.getElementById("adminEventList").innerHTML = siteData.events
+          .map(
+            (e, i) => `
+          <div style="display:flex; justify-between; align-items:center; background:#f9f9f9; padding:5px 10px; margin-bottom:5px; border-radius:4px;">
+            <span><strong>${e.name}</strong> (${e.date})</span>
+            <button class="btn-sm btn-orange" onclick="deleteEvent(${i})">Delete</button>
+          </div>
+        `
+          )
+          .join("");
+
+        // Circulars list
+        document.getElementById("adminCircularList").innerHTML = siteData.circulars
+          .map(
+            (c, i) => `
+          <div style="display:flex; justify-between; align-items:center; background:#f9f9f9; padding:5px 10px; margin-bottom:5px; border-radius:4px;">
+            <span><strong>${c.title}</strong></span>
+            <button class="btn-sm btn-orange" onclick="deleteCircular(${i})">Delete</button>
+          </div>
+        `
+          )
+          .join("");
+
+        // Media list
+        document.getElementById("adminMediaList").innerHTML = siteData.media
+          .map(
+            (m, i) => `
+          <div style="background:#f9f9f9; padding:8px; text-align:center; border-radius:4px;">
+            <img src="${m}" style="height:60px; object-fit:cover;">
+            <button class="btn-sm btn-orange" onclick="deleteMedia(${i})" style="margin-top:4px;">Delete</button>
+          </div>
+        `
+          )
+          .join("");
+
+        // Contact
+        document.getElementById("contactPhoneInput").value = siteData.contact.phone;
+        document.getElementById("contactEmailInput").value = siteData.contact.email;
+        document.getElementById("contactAddressInput").value = siteData.contact.address;
+
+        // Champ Soft
+        document.getElementById("champDescInput").value = siteData.champ.desc;
+        document.getElementById("champLinkInput").value = siteData.champ.link;
+      }
+
+      function saveSiteData() {
+        localStorage.setItem("yta_sitedata", JSON.stringify(siteData));
+        renderPublicContent();
+        renderCmsManager();
+      }
+
+      // CMS Submit Handlers
+      document.getElementById("addSliderForm").onsubmit = function (e) {
+        e.preventDefault();
+        const url = document.getElementById("sliderImgUrl").value;
+        const caption = document.getElementById("sliderCaption").value;
+        slides.push({ url, caption });
+        localStorage.setItem("yta_slides", JSON.stringify(slides));
+        renderSlider();
+        renderCmsManager();
+        this.reset();
+      };
+
+      function deleteSlide(idx) {
+        slides.splice(idx, 1);
+        localStorage.setItem("yta_slides", JSON.stringify(slides));
+        renderSlider();
+        renderCmsManager();
+      }
+
+      document.getElementById("aboutForm").onsubmit = function (e) {
+        e.preventDefault();
+        siteData.aboutTitle = document.getElementById("aboutTitleInput").value;
+        siteData.aboutDesc = document.getElementById("aboutDescInput").value;
+        saveSiteData();
+        alert("About Us updated!");
+      };
+
+      document.getElementById("branchForm").onsubmit = function (e) {
+        e.preventDefault();
+        siteData.branches.push(document.getElementById("branchNameInput").value);
+        saveSiteData();
+        this.reset();
+      };
+      function deleteBranch(idx) {
+        siteData.branches.splice(idx, 1);
+        saveSiteData();
+      }
+
+      document.getElementById("playerForm").onsubmit = function (e) {
+        e.preventDefault();
+        siteData.players.push({
+          name: document.getElementById("playerNameInput").value,
+          rank: document.getElementById("playerRankInput").value,
+          img: document.getElementById("playerImgInput").value,
+        });
+        saveSiteData();
+        this.reset();
+      };
+      function deletePlayer(idx) {
+        siteData.players.splice(idx, 1);
+        saveSiteData();
+      }
+
+      document.getElementById("eventForm").onsubmit = function (e) {
+        e.preventDefault();
+        siteData.events.push({
+          name: document.getElementById("eventNameInput").value,
+          date: document.getElementById("eventDateInput").value,
+          desc: document.getElementById("eventDescInput").value,
+        });
+        saveSiteData();
+        this.reset();
+      };
+      function deleteEvent(idx) {
+        siteData.events.splice(idx, 1);
+        saveSiteData();
+      }
+
+      document.getElementById("circularForm").onsubmit = function (e) {
+        e.preventDefault();
+        siteData.circulars.push({
+          title: document.getElementById("circTitleInput").value,
+          desc: document.getElementById("circDescInput").value,
+        });
+        saveSiteData();
+        this.reset();
+      };
+      function deleteCircular(idx) {
+        siteData.circulars.splice(idx, 1);
+        saveSiteData();
+      }
+
+      document.getElementById("mediaForm").onsubmit = function (e) {
+        e.preventDefault();
+        siteData.media.push(document.getElementById("mediaUrlInput").value);
+        saveSiteData();
+        this.reset();
+      };
+      function deleteMedia(idx) {
+        siteData.media.splice(idx, 1);
+        saveSiteData();
+      }
+
+      document.getElementById("contactForm").onsubmit = function (e) {
+        e.preventDefault();
+        siteData.contact.phone = document.getElementById("contactPhoneInput").value;
+        siteData.contact.email = document.getElementById("contactEmailInput").value;
+        siteData.contact.address = document.getElementById("contactAddressInput").value;
+        saveSiteData();
+        alert("Contact details updated!");
+      };
+
+      document.getElementById("champForm").onsubmit = function (e) {
+        e.preventDefault();
+        siteData.champ.desc = document.getElementById("champDescInput").value;
+        siteData.champ.link = document.getElementById("champLinkInput").value;
+        saveSiteData();
+        alert("Champ Soft details updated!");
+      };
+
+      // REGISTER STUDENT
+      document.getElementById("addStudentForm").onsubmit = function (e) {
+        e.preventDefault();
+        const photoFile = document.getElementById("sPhoto").files[0];
+
+        const saveStudentData = (photoUrl) => {
+          const newStudent = {
+            id: Date.now(),
+            name: document.getElementById("sName").value.trim(),
+            dob: document.getElementById("sDob").value,
+            mobile: document.getElementById("sMobile").value.trim(),
+            belt: document.getElementById("sBelt").value,
+            doj: document.getElementById("sDoj").value,
+            batch: document.getElementById("sBatch").value,
+            photo: photoUrl || "https://via.placeholder.com/100",
+            attendance: {}, // key: YYYY-MM, val: number of days
+            fees: {}, // key: YYYY-MM, val: "Paid" | "Pending"
           };
 
-          if (photoFile) {
-            const reader = new FileReader();
-            reader.onloadend = () => createStudentObj(reader.result);
-            reader.readAsDataURL(photoFile);
-          } else {
-            createStudentObj(null);
-          }
-        });
+          students.push(newStudent);
+          localStorage.setItem("yta_students", JSON.stringify(students));
+          alert("Student Registered Successfully!");
+          document.getElementById("addStudentForm").reset();
+          renderAdminTable();
+        };
 
-      function getRecordKey() {
-        return `${document.getElementById("filterYear").value}-${document.getElementById("filterMonth").value}`;
-      }
+        if (photoFile) {
+          const reader = new FileReader();
+          reader.onload = function (event) {
+            saveStudentData(event.target.result);
+          };
+          reader.readAsDataURL(photoFile);
+        } else {
+          saveStudentData(null);
+        }
+      };
 
-      function renderAdminData() {
-        const key = getRecordKey();
-        if (!monthlyRecords[key]) monthlyRecords[key] = {};
+      // ADMIN TABLE & STATS RENDERER
+      function renderAdminTable() {
+        const month = document.getElementById("filterMonth").value;
+        const batch = document.getElementById("filterBatch").value;
+        const query = document.getElementById("searchStudent").value.toLowerCase();
         const tbody = document.getElementById("studentTableBody");
         tbody.innerHTML = "";
-        let totalP = 0,
-          totalPaid = 0,
-          totalPend = 0;
 
-        students.forEach((student) => {
-          if (!monthlyRecords[key][student.id])
-            monthlyRecords[key][student.id] = {
-              feeStatus: "Pending",
-              presentDays: 0,
-            };
-          const record = monthlyRecords[key][student.id];
+        let presentCount = 0;
+        let paidCount = 0;
+        let pendingCount = 0;
 
-          if (record.feeStatus === "Paid") totalPaid++;
-          else totalPend++;
-          totalP += record.presentDays;
-
-          let tourHtml = "<small style='color:#888;'>No Record</small>";
-          if (student.tournament && student.tournament.name) {
-            tourHtml = `<strong>${student.tournament.name}</strong> (${student.tournament.year || "N/A"})<br><span class="badge badge-gold">${student.tournament.medal}</span>`;
-          }
-
-          tbody.appendChild(
-            Object.assign(document.createElement("tr"), {
-              innerHTML: `
-              <td><div class="student-cell"><img src="${student.photo || defaultAvatar}" class="student-thumb"><div><strong>${student.name}</strong><br><small>📱 ${student.mobile}</small></div></div></td>
-              <td>DOB: ${student.dob}<br>DOJ: ${student.doj}</td>
-              <td><span class="badge" style="background:#6c757d;">${student.belt}</span><br><small>${student.batch}</small></td>
-              <td>${tourHtml}</td>
-              <td>${student.address}</td>
-              <td><span class="badge ${record.feeStatus === "Paid" ? "badge-paid" : "badge-pending"}">${record.feeStatus}</span><br><br><button class="btn-sm btn-blue" onclick="toggleFee('${key}', ${student.id})">Toggle Fee</button></td>
-              <td><strong>Days Present: ${record.presentDays}</strong><br><br><button class="btn-sm btn-green" onclick="adjustAttendance('${key}', ${student.id}, 1)">+1</button><button class="btn-sm btn-orange" onclick="adjustAttendance('${key}', ${student.id}, -1)">-1</button></td>
-              <td><button class="btn-sm btn-dark" onclick="deleteStudent(${student.id})">Delete</button></td>
-            `,
-            }),
-          );
+        const filtered = students.filter((s) => {
+          const matchBatch = batch === "All" || s.batch === batch;
+          const matchQuery =
+            s.name.toLowerCase().includes(query) || s.mobile.includes(query);
+          return matchBatch && matchQuery;
         });
 
-        document.getElementById("statTotal").innerText = students.length;
-        document.getElementById("statPresent").innerText = totalP;
-        document.getElementById("statPaid").innerText = totalPaid;
-        document.getElementById("statPending").innerText = totalPend;
+        filtered.forEach((s) => {
+          const daysAttended = s.attendance[month] || 0;
+          const feeStatus = s.fees[month] || "Pending";
+
+          if (daysAttended > 0) presentCount++;
+          if (feeStatus === "Paid") paidCount++;
+          else pendingCount++;
+
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>
+              <img src="${s.photo}" class="student-thumb" alt="thumb">
+            </td>
+            <td><strong>${s.name}</strong></td>
+            <td>${s.mobile}<br><small style="color:#666">DOB: ${s.dob}</small></td>
+            <td>
+              <select onchange="updateBelt(${s.id}, this.value)" style="padding: 2px 5px; margin-bottom:0;">
+                <option value="White Belt" ${s.belt === "White Belt" ? "selected" : ""}>White Belt</option>
+                <option value="Yellow Belt" ${s.belt === "Yellow Belt" ? "selected" : ""}>Yellow Belt</option>
+                <option value="Green Belt" ${s.belt === "Green Belt" ? "selected" : ""}>Green Belt</option>
+                <option value="Green One Belt" ${s.belt === "Green One Belt" ? "selected" : ""}>Green One Belt</option>
+                <option value="Blue Belt" ${s.belt === "Blue Belt" ? "selected" : ""}>Blue Belt</option>
+                <option value="Blue One Belt" ${s.belt === "Blue One Belt" ? "selected" : ""}>Blue One Belt</option>
+                <option value="Red Belt" ${s.belt === "Red Belt" ? "selected" : ""}>Red Belt</option>
+                <option value="Red One Belt" ${s.belt === "Red One Belt" ? "selected" : ""}>Red One Belt</option>
+                <option value="1st Dan Black Belt" ${s.belt === "1st Dan Black Belt" ? "selected" : ""}>Black Belt 1st Dan</option>
+                <option value="Black Belt" ${s.belt === "Black Belt" ? "selected" : ""}>Black Belt 2nd Dan</option>
+              </select>
+            </td>
+            <td>${s.batch}</td>
+            <td>
+              <strong>${daysAttended} Days</strong>
+              <div style="margin-top:3px;">
+                <button class="btn-sm btn-green" onclick="markAttendance(${s.id}, '${month}', 1)">+1</button>
+                <button class="btn-sm btn-orange" onclick="markAttendance(${s.id}, '${month}', -1)">-1</button>
+              </div>
+            </td>
+            <td>
+              <span class="badge ${feeStatus === "Paid" ? "badge-paid" : "badge-pending"}">${feeStatus}</span>
+              <div style="margin-top:3px;">
+                <button class="btn-sm btn-blue" onclick="toggleFeeStatus(${s.id}, '${month}')">Toggle</button>
+              </div>
+            </td>
+            <td>
+              <button class="btn-sm btn-orange" onclick="deleteStudent(${s.id})">Delete</button>
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+
+        // Update Dashboard Stats
+        document.getElementById("statTotal").textContent = students.length;
+        document.getElementById("statPresent").textContent = presentCount;
+        document.getElementById("statPaid").textContent = paidCount;
+        document.getElementById("statPending").textContent = pendingCount;
       }
 
-      function toggleFee(key, id) {
-        monthlyRecords[key][id].feeStatus =
-          monthlyRecords[key][id].feeStatus === "Paid" ? "Pending" : "Paid";
-        localStorage.setItem(
-          "yash_taekwondo_v2_records",
-          JSON.stringify(monthlyRecords),
-        );
-        renderAdminData();
-      }
-
-      function adjustAttendance(key, id, change) {
-        let cur = (monthlyRecords[key][id].presentDays || 0) + change;
-        monthlyRecords[key][id].presentDays = Math.max(0, cur);
-        localStorage.setItem(
-          "yash_taekwondo_v2_records",
-          JSON.stringify(monthlyRecords),
-        );
-        renderAdminData();
-      }
-
-      function deleteStudent(id) {
-        if (confirm("Delete this student?")) {
-          students = students.filter((s) => s.id !== id);
-          localStorage.setItem(
-            "yash_taekwondo_v2_students",
-            JSON.stringify(students),
-          );
-          renderAdminData();
+      function markAttendance(id, month, val) {
+        const student = students.find((s) => s.id === id);
+        if (student) {
+          const current = student.attendance[month] || 0;
+          const next = Math.max(0, current + val);
+          student.attendance[month] = next;
+          localStorage.setItem("yta_students", JSON.stringify(students));
+          renderAdminTable();
         }
       }
 
-      function exportToExcel() {
-        if (!students.length) return alert("No data to export!");
-        const key = getRecordKey();
-        let csv =
-          "data:text/csv;charset=utf-8,\uFEFFName,Mobile,DOB,Belt,DOJ,Batch,Address,Fee Status,Present Days\n";
-        students.forEach((s) => {
-          const rec = (monthlyRecords[key] && monthlyRecords[key][s.id]) || {
-            feeStatus: "Pending",
-            presentDays: 0,
-          };
-          csv += `"${s.name}","${s.mobile}","${s.dob}","${s.belt}","${s.doj}","${s.batch}","${s.address.replace(/\n/g, " ")}","${rec.feeStatus}","${rec.presentDays}"\n`;
-        });
-        const link = document.createElement("a");
-        link.href = encodeURI(csv);
-        link.download = `Students_${key}.csv`;
-        link.click();
+      function toggleFeeStatus(id, month) {
+        const student = students.find((s) => s.id === id);
+        if (student) {
+          const current = student.fees[month] || "Pending";
+          student.fees[month] = current === "Paid" ? "Pending" : "Paid";
+          localStorage.setItem("yta_students", JSON.stringify(students));
+          renderAdminTable();
+        }
       }
 
+      function updateBelt(id, newBelt) {
+        const student = students.find((s) => s.id === id);
+        if (student) {
+          student.belt = newBelt;
+          localStorage.setItem("yta_students", JSON.stringify(students));
+        }
+      }
+
+      function deleteStudent(id) {
+        if (confirm("Are you sure you want to delete this student record?")) {
+          students = students.filter((s) => s.id !== id);
+          localStorage.setItem("yta_students", JSON.stringify(students));
+          renderAdminTable();
+        }
+      }
+
+      // STUDENT DASHBOARD RENDERER
       function renderStudentDashboard() {
-        if (!currentLoggedInStudent) return;
-        const s = currentLoggedInStudent;
-        document.getElementById("stProfileImg").src = s.photo || defaultAvatar;
-        document.getElementById("stProfileName").innerText = s.name;
-        document.getElementById("stProfileMobile").innerText = s.mobile;
-        document.getElementById("stProfileDob").innerText = s.dob;
-        document.getElementById("stProfileBelt").innerText = s.belt;
-        document.getElementById("stProfileDoj").innerText = s.doj;
-        document.getElementById("stProfileBatch").innerText = s.batch;
-        document.getElementById("stProfileAddress").innerText = s.address;
+        const student = currentUser.data;
 
-        const year = document.getElementById("stFilterYear").value;
-        const tbody = document.getElementById("studentLogsBody");
-        tbody.innerHTML = "";
-        const months = [
-          "01",
-          "02",
-          "03",
-          "04",
-          "05",
-          "06",
-          "07",
-          "08",
-          "09",
-          "10",
-          "11",
-          "12",
-        ];
-        const monthNames = [
-          "January",
-          "February",
-          "March",
-          "April",
-          "May",
-          "June",
-          "July",
-          "August",
-          "September",
-          "October",
-          "November",
-          "December",
-        ];
+        // Render Profile
+        const card = document.getElementById("studentProfileCard");
+        card.innerHTML = `
+          <img src="${student.photo}" alt="Profile Picture">
+          <div class="profile-info">
+            <h3>🥋 ${student.name}</h3>
+            <div class="profile-grid">
+              <div><strong>Mobile:</strong> ${student.mobile}</div>
+              <div><strong>DOB:</strong> ${student.dob}</div>
+              <div><strong>Belt Rank:</strong> <span class="badge btn-dark">${student.belt}</span></div>
+              <div><strong>Batch:</strong> ${student.batch}</div>
+              <div><strong>Date of Joining:</strong> ${student.doj}</div>
+            </div>
+          </div>
+        `;
 
-        months.forEach((m, idx) => {
-          const key = `${year}-${m}`;
-          const rec =
-            monthlyRecords[key] && monthlyRecords[key][s.id]
-              ? monthlyRecords[key][s.id]
-              : { feeStatus: "Pending", presentDays: 0 };
-          tbody.appendChild(
-            Object.assign(document.createElement("tr"), {
-              innerHTML: `<td><strong>${monthNames[idx]} ${year}</strong></td><td><span class="badge ${rec.feeStatus === "Paid" ? "badge-paid" : "badge-pending"}">${rec.feeStatus}</span></td><td>${rec.presentDays} Days Present</td>`,
-            }),
-          );
-        });
+        // Attendance Body
+        const attBody = document.getElementById("studentAttendanceBody");
+        attBody.innerHTML = "";
+        const attKeys = Object.keys(student.attendance).sort().reverse();
+        if (attKeys.length === 0) {
+          attBody.innerHTML = `<tr><td colspan="3">No attendance records found.</td></tr>`;
+        } else {
+          attKeys.forEach((m) => {
+            const count = student.attendance[m];
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+              <td>${m}</td>
+              <td>${count} Days</td>
+              <td><span class="badge btn-green">Active</span></td>
+            `;
+            attBody.appendChild(tr);
+          });
+        }
+
+        // Fees Body
+        const feesBody = document.getElementById("studentFeesBody");
+        feesBody.innerHTML = "";
+        const feeKeys = Object.keys(student.fees).sort().reverse();
+        if (feeKeys.length === 0) {
+          feesBody.innerHTML = `<tr><td colspan="3">No fee records found.</td></tr>`;
+        } else {
+          feeKeys.forEach((m) => {
+            const status = student.fees[m];
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+              <td>${m}</td>
+              <td><span class="badge ${status === "Paid" ? "badge-paid" : "badge-pending"}">${status}</span></td>
+              <td>${status === "Paid" ? "Verified" : "Pending Action"}</td>
+            `;
+            feesBody.appendChild(tr);
+          });
+        }
       }
 
-      // Initialize
-      renderSlider();
-      renderPublicCms();
+      // EXPORT CSV / EXCEL FUNCTION
+      function exportToExcel() {
+        if (students.length === 0) {
+          alert("No student data to export!");
+          return;
+        }
+
+        const month = document.getElementById("filterMonth").value;
+        let csvContent = "data:text/csv;charset=utf-8,";
+        csvContent += "ID,Name,Mobile,DOB,Belt,Batch,DOJ,Attendance (" + month + "),Fees Status (" + month + ")\n";
+
+        students.forEach((s) => {
+          const att = s.attendance[month] || 0;
+          const fee = s.fees[month] || "Pending";
+          const row = `"${s.id}","${s.name}","${s.mobile}","${s.dob}","${s.belt}","${s.batch}","${s.doj}","${att}","${fee}"`;
+          csvContent += row + "\n";
+        });
+
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", `Yash_Taekwondo_Students_${month}.csv`);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
     </script>
   </body>
 </html>
-
