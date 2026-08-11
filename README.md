@@ -27,7 +27,8 @@
         transform: translate(-50%, -50%);
         width: 300px;
         height: 300px;
-        background-image: url("https://via.placeholder.com/300?text=TKD+Logo");
+        background-image: url("
+        https://via.placeholder.com/300?text=TKD+Logo");
         background-repeat: no-repeat;
         background-position: center;
         background-size: contain;
@@ -558,7 +559,7 @@
     <!-- TOP NAVIGATION BAR -->
     <nav class="navbar">
       <div class="nav-brand">
-        <img src="https://via.placeholder.com/100?text=TKD" alt="Logo" />
+        <img src="C:\Users\Siraj\OneDrive\Desktop\HP\yta logo.jpg" alt="Logo" />
         <h2>Yash Taekwondo</h2>
       </div>
       <button class="menu-toggle" onclick="toggleMenu()">☰</button>
